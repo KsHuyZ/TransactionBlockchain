@@ -9,7 +9,7 @@ import eth from "../assets/eth-rainbow.png";
 import { TransactionContext } from "../context/TransactionContext";
 
 const style = {
-  wrapper: `p-4 w-screen flex justify-between items-center`,
+  wrapper: `p-4 flex justify-between items-center`,
   headerLogo: `flex w-1/4 items-center justify-start`,
   nav: `flex-1 flex justify-center items-center`,
   navItemsContainer: `flex bg-[#191B1F] rounded-3xl`,

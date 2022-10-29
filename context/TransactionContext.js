@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 import { contractABI, contractAddress } from "../lib/constants";
 import { client } from "../lib/sanityClient";
 export const TransactionContext = createContext();
+import { detectEthereumProvider } from "@metamask/detect-provider/dist/detect-provider";
 let eth;
 
 if (typeof window !== "undefined") {
@@ -13,6 +14,7 @@ export const TransactionProvider = ({ children }) => {
   const [currentAccount, setCurrentAccount] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({ addressTo: "", amount: 0 });
+  const [provider, setProvider] = useState();
 
   useEffect(() => {
     if (!currentAccount) return;
@@ -47,8 +49,8 @@ export const TransactionProvider = ({ children }) => {
   const checkWalletConnected = async (metamask = eth) => {
     try {
       if (!metamask) return alert("Please install metamask");
-      const accounts = await metamask.request({
-        method: "eth_requestAccounts",
+      const accounts = await eth.request({
+        method: "eth_accounts",
       });
       if (accounts.length) {
         setCurrentAccount(accounts[0]);
@@ -150,6 +152,9 @@ export const TransactionProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    window.ethereum.on("accountsChanged", function (accounts) {
+      setCurrentAccount(accounts[0]);
+    });
     checkWalletConnected();
   }, []);
 
